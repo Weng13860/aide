@@ -56,7 +56,7 @@ export function ToolManager({ tools, setTools, isLoading, error }: ToolManagerPr
     };
 
     return (
-        <div className="flex flex-col relative h-[calc(97vh)] overflow-clip select-none">
+        <div className="flex flex-col relative h-[calc(97vh)] select-none">
             <div
                 className="top-bar bg-gradient-to-b from-background/100 to-background/00"
                 style={{
@@ -88,6 +88,7 @@ export function ToolManager({ tools, setTools, isLoading, error }: ToolManagerPr
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <h3 className="font-bold">{tool.name}</h3>
+                                        <h3 className="font-bold">Testing</h3>
                                         <p className="text-sm text-muted-foreground">{tool.description}</p>
                                     </div>
                                     <div className="flex gap-2">
