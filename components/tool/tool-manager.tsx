@@ -12,6 +12,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+
+const toolFormSchema = z.object({
+    toolName: z.string(),
+    toolDescription: z.string(),
+    functionName: z.string(),
+    functionDescription: z.string(),
+    functionParameters: z.string(), 
+});
+
 
 interface Tool {
     id: string;
@@ -160,67 +181,104 @@ function ToolForm({ initialTool, onSave, onCancel }: {
         }
     });
 
+    const form = useForm<z.infer<typeof toolFormSchema>>({
+        resolver: zodResolver(toolFormSchema),
+        defaultValues: {
+            toolName: "",
+            toolDescription: "",
+            functionName: "",
+            functionDescription: "",
+            functionParameters: "", 
+        },
+    });
+
+    function onSubmit(values: z.infer<typeof toolFormSchema>) {
+        console.log(values);
+    }
+
     return (
         <div className="space-y-2">
-            <div>
-                <Label>Tool Name</Label>
-                <Input
-                    value={tool.name}
-                    onChange={(e) => setTool({ ...tool, name: e.target.value })}
-                />
-            </div>
-            <div>
-                <Label>Description</Label>
-                <Textarea
-                    value={tool.description}
-                    onChange={(e) => setTool({ ...tool, description: e.target.value })}
-                />
-            </div>
-            <div>
-                <Label>Function Name</Label>
-                <Input
-                    value={tool.function.name}
-                    onChange={(e) => setTool({
-                        ...tool,
-                        function: { ...tool.function, name: e.target.value }
-                    })}
-                />
-            </div>
-            <div>
-                <Label>Function Description</Label>
-                <Textarea
-                    value={tool.function.description}
-                    onChange={(e) => setTool({
-                        ...tool,
-                        function: { ...tool.function, description: e.target.value }
-                    })}
-                />
-            </div>
-            <div>
-                <Label>Parameters (JSON)</Label>
-                <Textarea
-                    value={JSON.stringify(tool.function.parameters, null, 2)}
-                    onChange={(e) => {
-                        try {
-                            const params = JSON.parse(e.target.value);
-                            setTool({
-                                ...tool,
-                                function: { ...tool.function, parameters: params }
-                            });
-                        } catch (error) {
-                            // Handle invalid JSON
-                        }
-                    }}
-                />
-            </div>
-            <div className="flex justify-end gap-2">
-                <Button className="sm" variant="outline" onClick={() => onSave(tool)}>
-                    <Check className="h-4 w-4" />
-                </Button>
-                <Button className="sm" variant="outline" onClick={onCancel}>
-                    <X className="h-4 w-4" />
-                </Button>
-            </div>
+            <Form {... form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <FormField
+                        name="toolName"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="toolName">Tool Name</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        id="toolName"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                            
+                        )}
+                    />
+                    <FormField
+                        name="toolDescription"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="toolDescription">Tool Description</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        id="toolDescription"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        name="functionName"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="functionName">Function Name</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        id="functionName"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        name="functionDescription"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="functionDescription">Function Description</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        id="functionDescription"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        name="functionParameters"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="functionParameters">Function Parameters</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        id="functionParameters"
+                                        {...field}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit">Save</Button>
+                </form>
+            </Form>
         </div>
     );
 }
