@@ -188,7 +188,11 @@ function ToolForm({ initialTool, onSave, onCancel }: {
             toolDescription: "",
             functionName: "",
             functionDescription: "",
-            functionParameters: "", 
+            functionParameters: JSON.stringify({
+                type: "object",
+                properties: {},
+                required: []
+            }, null, 2),
         },
     });
 
